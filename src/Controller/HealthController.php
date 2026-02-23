@@ -11,7 +11,7 @@ final class HealthController
     public function __invoke(): JsonResponse
     {
         return new JsonResponse([
-            'status' => 'oks',
+            'status' => 'oksd',
         ]);
     }
 }
