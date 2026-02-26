@@ -8,6 +8,7 @@ RUN apt-get update \
         git \
         unzip \
         libzip-dev \
+        dos2unix \
     && docker-php-ext-install pdo_mysql zip \
     && rm -rf /var/lib/apt/lists/*
 
@@ -22,7 +23,8 @@ RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoload
 COPY . .
 
 # Rendre l'entrypoint exécutable
-RUN chmod +x bin/entrypoint.sh
+RUN dos2unix bin/entrypoint.sh && chmod +x bin/entrypoint.sh
+
 
 # Port Railway
 ENV PORT=8080
