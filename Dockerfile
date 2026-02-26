@@ -25,4 +25,4 @@ COPY . .
 ENV PORT=8080
 EXPOSE 8080
 
-CMD ["sh", "-lc", "php -S 0.0.0.0:${PORT} -t public"]
+CMD ["sh", "-lc", "php -v && php -m && php -S 0.0.0.0:${PORT} -t public"]
