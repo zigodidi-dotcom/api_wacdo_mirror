@@ -21,8 +21,11 @@ RUN composer install --no-dev --prefer-dist --no-interaction --optimize-autoload
 # Code
 COPY . .
 
+# Rendre l'entrypoint exécutable
+RUN chmod +x bin/entrypoint.sh
+
 # Port Railway
 ENV PORT=8080
 EXPOSE 8080
 
-CMD ["sh", "-lc", "php -v && php -m && php -S 0.0.0.0:${PORT} -t public"]
+CMD ["sh", "-lc", "bin/entrypoint.sh"]
