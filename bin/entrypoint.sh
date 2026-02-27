@@ -1,6 +1,20 @@
 #!/usr/bin/env sh
 set -eu
 
+echo "creat jwt"
+mkdir -p config/jwt
+
+if [ -n "${JWT_PRIVATE_KEY_PEM:-}" ]; then
+  printf "%s" "$JWT_PRIVATE_KEY_PEM" > config/jwt/private.pem
+fi
+
+if [ -n "${JWT_PUBLIC_KEY_PEM:-}" ]; then
+  printf "%s" "$JWT_PUBLIC_KEY_PEM" > config/jwt/public.pem
+fi
+
+chmod 600 config/jwt/private.pem 2>/dev/null || true
+chmod 644 config/jwt/public.pem 2>/dev/null || true
+
 echo "Running migrations..."
 php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
 
