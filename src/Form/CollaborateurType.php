@@ -31,18 +31,10 @@ class CollaborateurType extends AbstractType
                                     (
                                         'Yes' => 'ROLE_ADMIN',
                                     ),
-                                    'ROLE_TEACHER' => array
+                                    'ROLE_USER' => array
                                     (
-                                        'Yes' => 'ROLE_TEACHER'
-                                    ),
-                                    'ROLE_STUDENT' => array
-                                    (
-                                        'Yes' => 'ROLE_STUDENT'
-                                    ),
-                                    'ROLE_PARENT' => array
-                                    (
-                                        'Yes' => 'ROLE_PARENT'
-                                    ),
+                                        'Yes' => 'ROLE_USER'
+                                    )
                                 ),
                     'multiple' => true,
                     'required' => true,

@@ -41,7 +41,7 @@ class Collaborateur implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     #[Assert\PasswordStrength(message: "Le mot de passe choisis est trop faible. il doit être plus long et/ou avec plus de caractères uniques")]
     #[Assert\NotBlank(message: "le mot de passe est obligatoire")]
-    #[Groups(['collaborateur:create'])]
+    #[Groups(['collaborateur:create', 'collaborateur:detail'])]
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
