@@ -56,6 +56,35 @@ final class AffectationController extends AbstractController
 
     }
 
+    #[Route('/{id}', name: 'details', methods: ['GET'])]
+    #[OA\Get(
+        path: '/api/affectation/{id}',
+        summary: 'Detail d un affectation',
+        tags: ['Affectations'],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Detail d un affectation',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(
+                        new Model(type: Affectation::class, groups: ['affectation:list'])
+                    )
+                )
+            )
+        ]
+    )]
+    public function getAffectation(Affectation $affectation, AffectationRepository $affectationRepository, int $id): JsonResponse
+    {
+//        if($affectation->getId() !== $this->getUser()->getId() && !in_array('ROLE_ADMIN', $this->getUser()->getRoles())){
+//            throw $this->createAccessDeniedException();
+//        }
+        $detail =$affectationRepository->findOne($id);
+
+
+        return $this->json($detail, context: ['groups' =>['affectation:list']]);
+    }
+
     #[Route('/filter', name: 'filter', methods: ['GET'])]
     #[IsGranted('ROLE_ADMIN')]
     #[OA\Get(

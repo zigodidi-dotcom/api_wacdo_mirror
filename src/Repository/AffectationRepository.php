@@ -36,7 +36,23 @@ class AffectationRepository extends ServiceEntityRepository
 
         return $qb ->getQuery()
             ->getArrayResult(); // ou getArrayResult() si tu veux un tableau
-        ;
+
+    }
+
+    public function findOne($value)
+    {
+        return $this->createQueryBuilder('a')
+            ->innerJoin('a.restaurant', 'r')
+            ->innerJoin('a.fonction', 'f')
+            ->innerJoin('a.collaborateur', 'c')
+            ->addSelect( 'r') // Sélectionne uniquement les champs/champs liés
+            ->addSelect( 'f') // Sélectionne uniquement les champs/champs liés
+            ->addSelect( 'c') // Sélectionne uniquement les champs/champs lié
+            ->andWhere('a.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult(); // ou getArrayResult() si tu veux un tableau
+
     }
 
 }
