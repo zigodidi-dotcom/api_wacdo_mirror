@@ -17,7 +17,6 @@ class AffectationDuplicateChecker
         $existing = $this->em->getRepository(Affectation::class)->findOneBy([
             'restaurant' => $affectation->getRestaurant(),
             'collaborateur' => $affectation->getCollaborateur(),
-            'fonction' => $affectation->getFonction(),
         ]);
 
         return $existing !== null;
