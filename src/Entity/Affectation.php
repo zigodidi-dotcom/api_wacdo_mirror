@@ -37,8 +37,7 @@ class Affectation
 
 
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: 'Un status est obligatoire')]
+    #[ORM\Column(type: 'boolean')]
     #[Groups(['affectation:list', 'affectation:create'])]
     private ?bool $status = null;
 
@@ -84,12 +83,12 @@ class Affectation
         return $this;
     }
 
-    public function getStatus(): ?string
+    public function getStatus(): ?bool
     {
         return $this->status;
     }
 
-    public function setStatus(string $status): static
+    public function setStatus(bool $status): static
     {
         $this->status = $status;
 

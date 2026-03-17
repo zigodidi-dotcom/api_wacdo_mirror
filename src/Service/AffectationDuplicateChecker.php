@@ -15,8 +15,8 @@ class AffectationDuplicateChecker
     public function isDuplicate(Affectation $affectation): bool
     {
         $existing = $this->em->getRepository(Affectation::class)->findOneBy([
-            'restaurant' => $affectation->getRestaurant(),
             'collaborateur' => $affectation->getCollaborateur(),
+            'status' => 1
         ]);
 
         return $existing !== null;

@@ -164,20 +164,42 @@ final class AffectationController extends AbstractController
     )]
     public function create(Request $request, AffectationDuplicateChecker $affectationDuplicateChecker): JsonResponse
     {
+        $data = json_decode($request->getContent(), true);
 
         $affectation = new Affectation();
 
+        if (array_key_exists('status', $data)) {
+            if (!is_bool($data['status'])) {
+                return $this->json([
+                    'errors' => [
+                        'status' => ['Le champ status doit être un booléen.'],
+                    ],
+                ], Response::HTTP_BAD_REQUEST);
+            }
+
+            $affectation->setStatus($data['status']);
+            unset($data['status']);
+        }
+
         $form = $this->formFactory->create(AffectationType::class, $affectation);
-        $form->submit(json_decode($request->getContent(),true),false);
+        $form->submit($data,false);
 
 
         if(!$form->isValid()) {
             return     $this->errorHandler->createErrorResponse($form, Response::HTTP_BAD_REQUEST);
         }
 
+        if ($affectation->getStatus() === null) {
+            return $this->json([
+                'errors' => [
+                    'status' => ['Un status est obligatoire'],
+                ],
+            ], Response::HTTP_BAD_REQUEST);
+        }
+
         if($affectationDuplicateChecker->isDuplicate($affectation)){
             return $this->json(
-                ['error' => 'Une affectation similaire existe déjà.'],
+                ['error' => 'Ce collaborateur est deja affecté. Veuillez  supprimer ou désactiver cette affectation'],
                 Response::HTTP_CONFLICT
             );
         }
@@ -199,6 +221,7 @@ final class AffectationController extends AbstractController
             content: new OA\JsonContent(
                 properties: [
                     new OA\Property(property: 'fonction', description: 'id de fonction', type: 'int'),
+                    new OA\Property(property: 'status', description: 'status active ou archivée', type: 'bool'),
                 ]
             ),
         ),
@@ -218,9 +241,21 @@ final class AffectationController extends AbstractController
     )]
     public function update(Affectation $affectation , Request $request): JsonResponse
     {
+        $data = json_decode($request->getContent(),true);
+        if (array_key_exists('status', $data)) {
+            if (!is_bool($data['status'])) {
+                return $this->json([
+                    'errors' => [
+                        'status' => ['Le champ status doit être un booléen.'],
+                    ],
+                ], Response::HTTP_BAD_REQUEST);
+            }
 
+            $affectation->setStatus($data['status']);
+            unset($data['status']);
+        }
         $form = $this->formFactory->create(AffectationType::class, $affectation);
-        $form->submit(json_decode($request->getContent(),true),false);
+        $form->submit($data, false);
 
         if(!$form->isValid()) {
             return     $this->errorHandler->createErrorResponse($form, Response::HTTP_BAD_REQUEST);
