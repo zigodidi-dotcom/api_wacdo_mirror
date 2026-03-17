@@ -35,6 +35,13 @@ class Affectation
     #[Groups(['restaurant:detail','affectation:list', 'affectation:create'])]
     private ?Collaborateur $collaborateur = null;
 
+
+
+    #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: 'Un status est obligatoire')]
+    #[Groups(['affectation:list', 'affectation:create'])]
+    private ?bool $status = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,4 +83,17 @@ class Affectation
 
         return $this;
     }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): static
+    {
+        $this->status = $status;
+
+        return $this;
+    }
+
 }

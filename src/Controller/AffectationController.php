@@ -144,6 +144,7 @@ final class AffectationController extends AbstractController
                     new OA\Property(property: 'collaborateur', description: 'id de collaborateur', type: 'int'),
                     new OA\Property(property: 'fonction', description: 'id de fonction', type: 'int'),
                     new OA\Property(property: 'restaurant', description: 'id de restaurant', type: 'int'),
+                    new OA\Property(property: 'status', description: 'status active ou archivée', type: 'bool'),
                 ]
             ),
         ),

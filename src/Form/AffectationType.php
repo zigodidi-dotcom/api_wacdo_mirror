@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use function Sodium\add;
 
 class AffectationType extends AbstractType
 {
@@ -28,7 +29,8 @@ class AffectationType extends AbstractType
             ->add('fonction', EntityType::class, [
                 'class' => Fonction::class,
                 'choice_label' => 'id',
-            ]);
+            ])
+            ->add("status");
 
 
     }
