@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Affectation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,7 +17,7 @@ class AffectationRepository extends ServiceEntityRepository
         parent::__construct($registry, Affectation::class);
     }
 
-    public function findByFilters($filters): array
+    public function findByFilters($filters,  int $page = 1, int $limit = 10): array
     {
         $qb = $this->createQueryBuilder('a')
             ->innerJoin('a.restaurant', 'r')
@@ -47,11 +48,21 @@ class AffectationRepository extends ServiceEntityRepository
                 ->setParameter('status', $filters['status']);
         }
 
+        $page = max(1, $page);
+        $limit = max(1, $limit);
+        $offset = ($page - 1) * $limit;
+        $qb->setFirstResult($offset)
+            ->setMaxResults($limit);
 
+        $paginator = new Paginator($qb->getQuery(), true);
 
-
-        return $qb ->getQuery()
-            ->getArrayResult(); // ou getArrayResult() si tu veux un tableau
+        return [
+            'data' => iterator_to_array($paginator->getIterator()),
+            'total' => count($paginator),
+            'page' => $page,
+            'limit' => $limit,
+            'pages' => (int) ceil(count($paginator) / $limit),
+        ];
 
     }
 

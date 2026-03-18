@@ -126,9 +126,11 @@ final class AffectationController extends AbstractController
             'status' => $request->query->get('status'),
             'collaborateur' => $request->query->get('collaborateur'),
         ];
+        $page = $request->query->getInt('page', 1);
+        $limit = $request->query->getInt('limit', 10);
 
 //        dump($filters);exit;
-        $affectation = $this->affectationRepository->findByFilters($filters);
+        $affectation = $this->affectationRepository->findByFilters($filters, $page, $limit);
 
         return $this->json($affectation, context: ['groups' =>['affectation:list']]);
 
