@@ -124,6 +124,7 @@ final class AffectationController extends AbstractController
             'fonction' => $request->query->get('fonction'),
             'restaurant' => $request->query->get('restaurant'),
             'status' => $request->query->get('status'),
+            'collaborateur' => $request->query->get('collaborateur'),
         ];
 
 //        dump($filters);exit;
