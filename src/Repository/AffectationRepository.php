@@ -28,12 +28,12 @@ class AffectationRepository extends ServiceEntityRepository
 
         //!! compléter les tests phpunit si on ajoute des filtres
         if (!empty($filters['fonction'])) {
-            $qb->andWhere('f.nom = :fonction')
+            $qb->andWhere('f.id = :fonction')
                 ->setParameter('fonction', $filters['fonction']);
         }
 
         if (!empty($filters['restaurant'])) {
-            $qb->andWhere('r.nom = :restaurant')
+            $qb->andWhere('r.id = :restaurant')
                 ->setParameter('restaurant', $filters['restaurant']);
         }
 
