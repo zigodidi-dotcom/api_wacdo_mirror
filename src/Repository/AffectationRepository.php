@@ -37,7 +37,7 @@ class AffectationRepository extends ServiceEntityRepository
                 ->setParameter('restaurant', $filters['restaurant']);
         }
 
-        if (array_key_exists('status', $filters)) {
+        if ($filters['status'] !== null) {
             $qb->andWhere('a.status = :status')
                 ->setParameter('status', $filters['status']);
         }
