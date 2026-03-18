@@ -267,7 +267,7 @@ final class AffectationController extends AbstractController
 
         if($affectationDuplicateChecker->isDuplicate($affectation)){
             return $this->json(
-                ['error' => 'Ce collaborateur est deja affecté. Veuillez  supprimer ou désactiver cette affectation'],
+                ['error' => 'Ce collaborateur sest deja affecté. Veuillez  supprimer ou désactiver cette affectation'],
                 Response::HTTP_CONFLICT
             );
         }
