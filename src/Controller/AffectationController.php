@@ -24,7 +24,7 @@ final class AffectationController extends AbstractController
 {
 
     public function __construct( private AffectationRepository $affectationRepository , private EntityManagerInterface $em,
-                                 private FormFactoryInterface $formFactory, private FormErrorHandler $errorHandler){
+                                 private FormFactoryInterface $formFactory, private FormErrorHandler $errorHandler, private AffectationDuplicateChecker $affectationDuplicateChecker){
 
     }
 
@@ -166,7 +166,7 @@ final class AffectationController extends AbstractController
             )
         ]
     )]
-    public function create(Request $request, AffectationDuplicateChecker $affectationDuplicateChecker): JsonResponse
+    public function create(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
@@ -201,7 +201,7 @@ final class AffectationController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        if($affectationDuplicateChecker->isDuplicate($affectation)){
+        if($this->affectationDuplicateChecker->isDuplicate($affectation)){
             return $this->json(
                 ['error' => 'Ce collaborateur est deja affecté. Veuillez  supprimer ou désactiver cette affectation'],
                 Response::HTTP_CONFLICT
@@ -243,7 +243,7 @@ final class AffectationController extends AbstractController
             )
         ]
     )]
-    public function update(Affectation $affectation , Request $request, AffectationDuplicateChecker $affectationDuplicateChecker): JsonResponse
+    public function update(Affectation $affectation , Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(),true);
         if (array_key_exists('status', $data)) {
@@ -264,10 +264,11 @@ final class AffectationController extends AbstractController
         if(!$form->isValid()) {
             return     $this->errorHandler->createErrorResponse($form, Response::HTTP_BAD_REQUEST);
         }
-
-        if($affectationDuplicateChecker->isDuplicate($affectation)){
+//
+//        dump($affectation->getStatus());exit;
+        if($affectation->getStatus() === true && $this->affectationDuplicateChecker->isDuplicate($affectation)){
             return $this->json(
-                ['error' => 'Ce collaborateur sest deja affecté. Veuillez  supprimer ou désactiver cette affectation'],
+                ['error' => 'Ce collaborateur est deja affecté. Veuillez  supprimer ou désactiver cette affectation'],
                 Response::HTTP_CONFLICT
             );
         }
