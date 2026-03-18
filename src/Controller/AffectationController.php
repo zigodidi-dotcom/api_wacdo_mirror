@@ -243,7 +243,7 @@ final class AffectationController extends AbstractController
             )
         ]
     )]
-    public function update(Affectation $affectation , Request $request): JsonResponse
+    public function update(Affectation $affectation , Request $request, AffectationDuplicateChecker $affectationDuplicateChecker): JsonResponse
     {
         $data = json_decode($request->getContent(),true);
         if (array_key_exists('status', $data)) {
@@ -263,6 +263,13 @@ final class AffectationController extends AbstractController
 
         if(!$form->isValid()) {
             return     $this->errorHandler->createErrorResponse($form, Response::HTTP_BAD_REQUEST);
+        }
+
+        if($affectationDuplicateChecker->isDuplicate($affectation)){
+            return $this->json(
+                ['error' => 'Ce collaborateur est deja affecté. Veuillez  supprimer ou désactiver cette affectation'],
+                Response::HTTP_CONFLICT
+            );
         }
 
         $this->em->flush();
