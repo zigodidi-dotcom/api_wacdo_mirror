@@ -32,6 +32,17 @@ class AffectationRepository extends ServiceEntityRepository
                 ->setParameter('fonction', $filters['fonction']);
         }
 
+        if (!empty($filters['restaurant'])) {
+            $qb->andWhere('r.nom = :restaurant')
+                ->setParameter('restaurant', $filters['restaurant']);
+        }
+
+        if (array_key_exists('status', $filters)) {
+            $qb->andWhere('a.status = :status')
+                ->setParameter('status', $filters['status']);
+        }
+
+
 
 
         return $qb ->getQuery()

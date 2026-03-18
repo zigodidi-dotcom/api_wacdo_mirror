@@ -56,9 +56,9 @@ final class AffectationController extends AbstractController
 
     }
 
-    #[Route('/{id}', name: 'details', methods: ['GET'])]
+    #[Route('/detail/{id}', name: 'details', requirements: ['id' => '\d+'], methods: ['GET'])]
     #[OA\Get(
-        path: '/api/affectation/{id}',
+        path: '/api/affectation/detail/{id}',
         summary: 'Detail d un affectation',
         tags: ['Affectations'],
         responses: [
@@ -74,7 +74,7 @@ final class AffectationController extends AbstractController
             )
         ]
     )]
-    public function getAffectation(Affectation $affectation, AffectationRepository $affectationRepository, int $id): JsonResponse
+    public function getAffectation(AffectationRepository $affectationRepository, int $id): JsonResponse
     {
 //        if($affectation->getId() !== $this->getUser()->getId() && !in_array('ROLE_ADMIN', $this->getUser()->getRoles())){
 //            throw $this->createAccessDeniedException();
@@ -122,12 +122,15 @@ final class AffectationController extends AbstractController
     {
         $filters = [
             'fonction' => $request->query->get('fonction'),
-            'restaurant' => $request->query->get('restaurant')
+            'restaurant' => $request->query->get('restaurant'),
+            'status' => $request->query->get('status'),
         ];
 
+//        dump($filters);exit;
         $affectation = $this->affectationRepository->findByFilters($filters);
 
         return $this->json($affectation, context: ['groups' =>['affectation:list']]);
+
 
     }
 
