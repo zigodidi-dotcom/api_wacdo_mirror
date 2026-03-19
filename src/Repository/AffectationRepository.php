@@ -57,7 +57,7 @@ class AffectationRepository extends ServiceEntityRepository
         $paginator = new Paginator($qb->getQuery(), true);
 
         return [
-            'data' => iterator_to_array($paginator->getIterator()),
+            'datas' => iterator_to_array($paginator->getIterator()),
             'total' => count($paginator),
             'page' => $page,
             'limit' => $limit,
