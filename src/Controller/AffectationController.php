@@ -171,7 +171,7 @@ final class AffectationController extends AbstractController
     public function create(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-
+        $activatedStatus = false;
         $affectation = new Affectation();
 
         if (array_key_exists('status', $data)) {
@@ -182,7 +182,9 @@ final class AffectationController extends AbstractController
                     ],
                 ], Response::HTTP_BAD_REQUEST);
             }
-
+            if($data['status'] === true){
+                $activatedStatus = true;
+            }
             $affectation->setStatus($data['status']);
             unset($data['status']);
         }
@@ -203,7 +205,8 @@ final class AffectationController extends AbstractController
             ], Response::HTTP_BAD_REQUEST);
         }
 
-        if($this->affectationDuplicateChecker->isDuplicate($affectation)){
+        //si j'essaie de créer et d'activer une affectation d'un collab alors qu'il est deja affecté et activé ailleurs : impossible
+        if($activatedStatus === true && $this->affectationDuplicateChecker->isDuplicate($affectation)){
             return $this->json(
                 ['error' => 'Ce collaborateur est deja affecté. Veuillez  supprimer ou désactiver cette affectation'],
                 Response::HTTP_CONFLICT
@@ -247,6 +250,7 @@ final class AffectationController extends AbstractController
     )]
     public function update(Affectation $affectation , Request $request): JsonResponse
     {
+        $activatedStatus = false;
         $data = json_decode($request->getContent(),true);
         if (array_key_exists('status', $data)) {
             if (!is_bool($data['status'])) {
@@ -256,7 +260,9 @@ final class AffectationController extends AbstractController
                     ],
                 ], Response::HTTP_BAD_REQUEST);
             }
-
+            if($data['status'] === true){
+                $activatedStatus = true;
+            }
             $affectation->setStatus($data['status']);
             unset($data['status']);
         }
@@ -268,7 +274,8 @@ final class AffectationController extends AbstractController
         }
 //
 //        dump($affectation->getStatus());exit;
-        if($affectation->getStatus() === true && $this->affectationDuplicateChecker->isDuplicate($affectation)){
+        //updated impossible si on essaie d'activer un collborateur deja activé ailleurs
+        if($activatedStatus === true && $this->affectationDuplicateChecker->isDuplicate($affectation)){
             return $this->json(
                 ['error' => 'Ce collaborateur est deja affecté. Veuillez  supprimer ou désactiver cette affectation'],
                 Response::HTTP_CONFLICT
