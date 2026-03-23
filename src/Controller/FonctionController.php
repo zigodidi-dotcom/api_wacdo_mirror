@@ -26,7 +26,6 @@ final class FonctionController extends AbstractController
 
 
     #[Route('', name: 'list', methods: ['GET'])]
-    #[IsGranted('ROLE_ADMIN')]
     public function list(): JsonResponse
     {
         $fonctions = $this->fonctionRepository->findAll();
