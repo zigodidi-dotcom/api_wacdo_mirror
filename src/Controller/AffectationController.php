@@ -85,7 +85,6 @@ final class AffectationController extends AbstractController
     }
 
     #[Route('/filter', name: 'filter', methods: ['GET'])]
-    #[IsGranted('ROLE_ADMIN')]
     #[OA\Get(
         path: '/api/affectation/filter',
         summary: 'Liste des affectation filtrée',
