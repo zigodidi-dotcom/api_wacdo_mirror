@@ -34,6 +34,29 @@ final class FonctionController extends AbstractController
 
     }
 
+    #[Route('/{id}', name: 'details', methods: ['GET'])]
+    #[OA\Get(
+        path: '/{id}',
+        summary: 'Detail d une fonction',
+        tags: ['Fonctions'],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: 'Detail d une fonction',
+                content: new OA\JsonContent(
+                    type: 'array',
+                    items: new OA\Items(
+                        new Model(type: Fonction::class, groups: ['fonction:list'])
+                    )
+                )
+            )
+        ]
+    )]
+    public function getFonction(Fonction $fontion): JsonResponse
+    {
+        return $this->json($fontion, context: ['groups' =>['fonction:list']]);
+    }
+
     #[Route('', name: 'create', methods: ['POST'])]
     #[IsGranted('ROLE_ADMIN')]
     public function create(Request $request): JsonResponse
