@@ -38,7 +38,7 @@ class Affectation
 
 
     #[ORM\Column(type: 'boolean')]
-    #[Groups(['affectation:list', 'affectation:create'])]
+    #[Groups(['affectation:list', 'affectation:create', 'collaborateur:detail'])]
     private ?bool $status = null;
 
     public function getId(): ?int
